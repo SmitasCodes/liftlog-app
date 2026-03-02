@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { LoginData } from "../types/auth";
+import type { LoginData, RegisterData } from "../types/auth";
 
 const loginService = async ({ username, password }: LoginData) => {
   try {
@@ -23,4 +23,22 @@ const loginService = async ({ username, password }: LoginData) => {
   }
 };
 
-export { loginService };
+const registerService = async ({ username, email, password }: RegisterData) => {
+  try {
+    const response = await axios.post("http://localhost:3337/api/users/", {
+      username,
+      email,
+      password,
+    });
+
+    if (response.data) {
+      console.log(response.data);
+    }
+    return response;
+  } catch (error) {
+    console.error("Error when trying to register: ", error);
+    return error;
+  }
+};
+
+export { loginService, registerService };
