@@ -33,6 +33,8 @@ const Login = () => {
     }));
   };
 
+  console.log(Testas);
+
   return (
     <AuthLayout title="Log into Liftlog">
       <form onSubmit={handleSubmit}>

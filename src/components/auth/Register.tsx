@@ -1,7 +1,8 @@
-import React, { useState, type ChangeEvent, type SubmitEvent } from "react";
+import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import AuthLayout from "./AuthLayout";
 import { type RegisterData } from "./types";
 import { registerService } from "../../services/authServices";
+import { useLocalStorage } from "../../context/AuthContext";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -33,6 +34,8 @@ const Register = () => {
       [name]: value,
     }));
   };
+
+  const users = useLocalStorage("user", 0);
 
   return (
     <AuthLayout title={"Sign up to Liftlog"}>
