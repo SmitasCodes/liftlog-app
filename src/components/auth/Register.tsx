@@ -70,7 +70,6 @@ const Register = () => {
         {loading && <p>Loading place holder</p>}
         <input type="submit" value="Sign up" className="cursor-pointer" />
         <button>Login</button>
-        <button onClick={handleLogOut}>Log out</button>
       </form>
     </AuthLayout>
   );
