@@ -2,6 +2,7 @@ import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import AuthLayout from "./AuthLayout";
 import { type RegisterData } from "./types";
 import { registerService } from "../../services/authServices";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState<RegisterData>({
@@ -11,13 +12,14 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const user = await registerService(registerData);
-      localStorage.setItem("user", JSON.stringify(user));
+      signUp(user);
     } catch {
       setError("Invalid credentials or username, email already exist.");
     } finally {
@@ -68,6 +70,7 @@ const Register = () => {
         {loading && <p>Loading place holder</p>}
         <input type="submit" value="Sign up" className="cursor-pointer" />
         <button>Login</button>
+        <button onClick={handleLogOut}>Log out</button>
       </form>
     </AuthLayout>
   );

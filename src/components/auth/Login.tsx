@@ -2,6 +2,7 @@ import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import { type LoginData } from "./types.ts";
 import { loginService } from "../../services/authServices.tsx";
 import AuthLayout from "./AuthLayout.tsx";
+import { useAuth } from "../../context/AuthContext.tsx";
 
 const Login = () => {
   const [loginData, setLoginData] = useState<LoginData>({
@@ -10,13 +11,15 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { signIn } = useAuth();
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const user = await loginService(loginData);
-      localStorage.setItem("user", JSON.stringify(user));
+      console.log(user);
+      signIn(user);
     } catch {
       setError("Invalid username or password");
     } finally {
