@@ -1,18 +1,33 @@
-import { useNavigate } from "react-router";
 import Login from "../components/auth/Login";
+import Register from "../components/auth/Register";
 import { useAuth } from "../context/AuthContext";
-// import Register from "../components/auth/Register";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const Auth = () => {
+  const [loginActive, setLoginActive] = useState(true);
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  if (user) {
-    navigate("/home");
-  }
+  useEffect(() => {
+    if (user) {
+      navigate("/home");
+    }
+  }, [user, navigate]);
+
+  const activeCompText = loginActive ? "Create an account" : "Login instead";
+
   return (
     <>
-      <Login />
+      {loginActive ? <Login /> : <Register />}
+      <button
+        className="cursor-pointer"
+        onClick={() => {
+          setLoginActive(!loginActive);
+        }}
+      >
+        {activeCompText}
+      </button>
     </>
   );
 };

@@ -18,7 +18,6 @@ const Login = () => {
     setLoading(true);
     try {
       const user = await loginService(loginData);
-      console.log(user);
       signIn(user);
     } catch {
       setError("Invalid username or password");
@@ -60,7 +59,6 @@ const Login = () => {
         {error && <p>{error}</p>}
         {loading && <h2>Loading placeholder</h2>}
         <input type="submit" value="Log in" className="cursor-pointer" />
-        <button>Sign up</button>
       </form>
     </AuthLayout>
   );

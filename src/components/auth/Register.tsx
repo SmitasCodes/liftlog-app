@@ -69,7 +69,6 @@ const Register = () => {
         {error && <p>{error}</p>}
         {loading && <p>Loading place holder</p>}
         <input type="submit" value="Sign up" className="cursor-pointer" />
-        <button>Login</button>
       </form>
     </AuthLayout>
   );
