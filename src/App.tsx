@@ -1,14 +1,20 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
-import ProtectedRoute from "./components/ProtectedRoute";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { HomeLayout } from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   { index: true, path: "/", Component: Auth },
   {
     path: "home",
     Component: ProtectedRoute,
-    children: [{ index: true, Component: Home }],
+    children: [
+      {
+        Component: HomeLayout,
+        children: [{ index: true, Component: Home }],
+      },
+    ],
   },
 ]);
 

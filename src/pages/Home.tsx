@@ -6,8 +6,7 @@ import { useTemplate } from "../context/TemplateContext";
 
 const Home = () => {
   const { logOut, user } = useAuth();
-  const { loadTemplate } = useTemplate();
-
+  const { loadTemplates, templates } = useTemplate();
   // Hardcoded for now
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgsImlhdCI6MTc3MTk0MzAwMiwiZXhwIjoxNzc0NTM1MDAyfQ.oKXiAmffR5rJVut-ZsASKhItCKlGypiguHM4x1PvObE";
@@ -15,21 +14,19 @@ const Home = () => {
   useEffect(() => {
     const fetchTemplates = async () => {
       const templates = await getTemplates(token);
-      return templates;
+      loadTemplates(templates);
     };
 
-    const templates = fetchTemplates();
-
-    loadTemplate(templates);
-  }, [user, loadTemplate]);
+    fetchTemplates();
+  }, [user, loadTemplates]);
 
   return (
-    <div>
-      <Templates />
+    <>
+      <Templates templates={templates} />
       <button onClick={logOut} className="cursor-pointer">
         Log the fuck out
       </button>
-    </div>
+    </>
   );
 };
 
