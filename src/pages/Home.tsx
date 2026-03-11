@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Templates from "../components/Templates";
+import Templates from "../components/templates/Templates";
 import { useAuth } from "../context/AuthContext";
 import { getTemplates } from "../services/templateServices";
 import { useTemplate } from "../context/TemplateContext";

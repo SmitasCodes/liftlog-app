@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Template } from "../context/TemplateContext";
+import { type Template } from "../../context/TemplateContext";
 import TemplatesForm from "./TemplatesForm";
 
 const Templates = ({ templates }: { templates: Template[] }) => {
