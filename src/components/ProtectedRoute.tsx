@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { TemplateProvider } from "../context/TemplateContext";
+import { TemplateProvider } from "../context/TemplatesContext";
 
 const ProtectedRoute = () => {
   const navigate = useNavigate();

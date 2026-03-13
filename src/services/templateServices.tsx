@@ -3,6 +3,7 @@ import {
   type TemplateData,
   type ExerciseData,
 } from "../components/templates/types.ts";
+import type { Template } from "../context/TemplatesContext.tsx";
 
 const getTemplates = async (token: string) => {
   const response = await axios.get("http://localhost:3337/api/templates/", {
@@ -28,6 +29,19 @@ const postTemplate = async (token: string, template: TemplateData) => {
   return response.data;
 };
 
+const getTemplate = async (templateId: Template["id"], token: string) => {
+  const response = await axios.get(
+    `http://localhost:3337/api/templates/${templateId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return response.data;
+};
+
 const postExercise = async (token: string, exercise: ExerciseData) => {
   const response = await axios.post(
     "http://localhost:3337/api/exercises/",
@@ -42,4 +56,4 @@ const postExercise = async (token: string, exercise: ExerciseData) => {
   return response.data;
 };
 
-export { getTemplates, postTemplate, postExercise };
+export { getTemplates, getTemplate, postTemplate, postExercise };

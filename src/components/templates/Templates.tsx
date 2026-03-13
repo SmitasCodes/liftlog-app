@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { type Template } from "../../context/TemplateContext";
+import { type Template } from "../../context/TemplatesContext";
 import TemplatesForm from "./TemplatesForm";
+import TemplatesList from "./TemplatesList";
 
 const Templates = ({ templates }: { templates: Template[] }) => {
-  const [formActive, setFormActive] = useState(false);
+  const [formActive, setFormActive] = useState<boolean>(false);
+  const [editTemplate, setEditTemplate] = useState<Template["id"] | null>(null);
+
   return (
     <div className="bg-blue-300 w-120 p-2 ">
       <h2 className="mb-1 text-xl font-bold text-center">Templates</h2>
@@ -11,21 +14,16 @@ const Templates = ({ templates }: { templates: Template[] }) => {
         templates.length == 0 ? (
           <p>Templates is empty</p>
         ) : (
-          <ul>
-            {templates.map(({ id, name }) => {
-              return (
-                <li key={id} className="bg-blue-600 mb-2 pl-2 py-0.5">
-                  {name}
-                </li>
-              );
-            })}
-          </ul>
+          <TemplatesList
+            setEditTemplate={setEditTemplate}
+            setFormActive={setFormActive}
+          />
         )
       ) : (
-        <TemplatesForm />
+        <TemplatesForm templateId={editTemplate} />
       )}
 
-      {/* Will need fix */}
+      {/* Will need fix later*/}
       {!formActive && (
         <div className="flex justify-end">
           <button
