@@ -7,18 +7,22 @@ const Templates = ({ templates }: { templates: Template[] }) => {
   const [formActive, setFormActive] = useState<boolean>(false);
   const [editTemplate, setEditTemplate] = useState<Template["id"] | null>(null);
 
+  const templatesContent =
+    templates.length == 0 ? (
+      <p>Templates is empty</p>
+    ) : (
+      <TemplatesList
+        setEditTemplate={setEditTemplate}
+        setFormActive={setFormActive}
+      />
+    );
+
   return (
     <div className="bg-blue-300 w-120 p-2 ">
       <h2 className="mb-1 text-xl font-bold text-center">Templates</h2>
+
       {!formActive ? (
-        templates.length == 0 ? (
-          <p>Templates is empty</p>
-        ) : (
-          <TemplatesList
-            setEditTemplate={setEditTemplate}
-            setFormActive={setFormActive}
-          />
-        )
+        templatesContent
       ) : (
         <TemplatesForm templateId={editTemplate} />
       )}
