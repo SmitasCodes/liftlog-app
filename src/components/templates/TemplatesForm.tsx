@@ -1,8 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type SubmitEvent } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getTemplate, postTemplate } from "../../services/templateServices";
-import ExerciseAdd from "../exercises/ExerciseAdd";
-import ExerciseList from "../exercises/ExerciseList";
 import { type Template } from "../../context/TemplatesContext";
 import Exercises from "../exercises/Exercises";
 
