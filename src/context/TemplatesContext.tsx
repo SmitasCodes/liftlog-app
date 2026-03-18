@@ -1,23 +1,6 @@
 import { createContext, useCallback, useContext, type ReactNode } from "react";
 import { useLocalStorage } from "usehooks-ts";
-
-interface Template {
-  id: number;
-  name: string;
-  templateExercises?: TemplateExercise[];
-}
-
-interface TemplateExercise {
-  id: number;
-  order: number;
-  sets: number;
-  exercise: Exercise;
-}
-
-interface Exercise {
-  id: number;
-  name: string;
-}
+import { type Template } from "../types/template";
 
 interface TemplateContextType {
   templates: Template[];
@@ -57,4 +40,4 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export { TemplateProvider, useTemplate, type Template };
+export { TemplateProvider, useTemplate };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Template } from "../../context/TemplatesContext";
+import { type Template } from "../../types/template";
 import TemplatesForm from "./TemplatesForm";
 import TemplatesList from "./TemplatesList";
 

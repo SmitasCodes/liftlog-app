@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type SubmitEvent } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getTemplate, postTemplate } from "../../services/templateServices";
-import { type Template } from "../../context/TemplatesContext";
+import { type Template } from "../../types/template";
 import Exercises from "../exercises/Exercises";
 
 const TemplatesForm = ({
@@ -11,7 +11,7 @@ const TemplatesForm = ({
 }) => {
   const { user } = useAuth();
   const token = user?.token || "";
-  const [formData, setFormData] = useState({ name: "" });
+  const [templateName, setTemplateName] = useState<Template["name"]>("");
   const [template, setTemplate] = useState<Pick<
     Template,
     "id" | "name"
@@ -21,7 +21,7 @@ const TemplatesForm = ({
     if (templateId !== null) {
       const fetchTemplate = async () => {
         const template = await getTemplate(templateId, token);
-        setFormData({ name: template.name });
+        setTemplateName(template.name);
       };
       fetchTemplate();
     }
@@ -30,17 +30,18 @@ const TemplatesForm = ({
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     try {
-      const template = await postTemplate(token, formData);
+      const template = await postTemplate(token, templateName);
       setTemplate({ name: template.name, id: template.id });
     } catch (error) {
       console.error("Failed to create template", error);
     }
   };
 
+  // FIX NEEDED
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setTemplateName(value);
   };
 
   return (
@@ -55,7 +56,7 @@ const TemplatesForm = ({
             name="name"
             className={`bg-blue-200 pl-1.5`}
             onChange={handleChange}
-            value={formData.name}
+            value={templateName}
             disabled={template !== null}
           />
         </div>
@@ -72,21 +73,5 @@ const TemplatesForm = ({
   );
 };
 
-{
-  /* Exercise addition */
-}
-{
-  /* <label className="font-bold">Exercises</label>
-      <ExerciseList /> */
-}
-{
-  /* <ExerciseAdd />  */
-}
-
-{
-  /* <div className="flex justify-end">
-        <input type="submit" value="Save template" className=" bg-red-200" />
-      </div> */
-}
 
 export default TemplatesForm;

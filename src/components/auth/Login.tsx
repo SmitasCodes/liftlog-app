@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
-import { type LoginData } from "./types.ts";
+import { type LoginData } from "../../types/auth.ts";
 import { loginService } from "../../services/authServices.tsx";
 import AuthLayout from "./AuthLayout.tsx";
 import { useAuth } from "../../context/AuthContext.tsx";

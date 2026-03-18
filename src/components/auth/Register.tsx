@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import AuthLayout from "./AuthLayout";
-import { type RegisterData } from "./types";
+import { type RegisterData } from "../../types/auth.ts";
 import { registerService } from "../../services/authServices";
 import { useAuth } from "../../context/AuthContext";
 

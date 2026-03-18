@@ -4,24 +4,29 @@ import {
   postTemplateExercise,
 } from "../../services/exerciseServices.tsx";
 import { useAuth } from "../../context/AuthContext";
-import type { ExerciseData } from "./types.ts";
-import type { Template } from "../../context/TemplatesContext.tsx";
+import type {
+  Template,
+  Exercise,
+  TemplateExercise,
+} from "../../types/template.ts";
 
 const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
-  const [formData, setFormData] = useState<ExerciseData>({
-    name: "",
-    sets: 0,
-    order: 0,
-  });
+  const [exerciseName, setExerciseName] = useState<Exercise["name"] | null>(
+    null,
+  );
+
+  const [templateExercise, setTemplateExercise] = useState<Pick<
+    TemplateExercise,
+    "sets" | "order"
+  > | null>(null);
 
   const { user } = useAuth();
   const token = user?.token || "";
 
   const handleSubmit = async () => {
     try {
-      if (!formData.name) return;
-      const exercise = await postExercise(token, formData.name);
-      const exerciseId: number = exercise.id;
+      const exercise = await postExercise(token, exerciseName);
+      const exerciseId: Exercise["id"] = exercise.id;
       const templateExercise = await postTemplateExercise(
         templateId,
         exerciseId,
@@ -33,10 +38,10 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
     }
   };
 
+  // Broken function need changing, leaving rn for testing
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
     const { value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setExerciseName(value);
   };
 
   return (

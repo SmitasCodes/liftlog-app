@@ -1,8 +1,7 @@
 import axios from "axios";
-import { type ExerciseData } from "../components/exercises/types.ts";
-import type { Template } from "../context/TemplatesContext.tsx";
+import type { Template, Exercise } from "../types/template.ts";
 
-const postExercise = async (token: string, exercise: ExerciseData["name"]) => {
+const postExercise = async (token: string, exercise: Exercise["name"]) => {
   const response = await axios.post(
     "http://localhost:3337/api/exercises/",
     { name: exercise },

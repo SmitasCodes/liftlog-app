@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  type TemplateData,
-  type ExerciseData,
-} from "../components/templates/types.ts";
-import type { Template } from "../context/TemplatesContext.tsx";
+import type { Template } from "../types/template";
 
 const getTemplates = async (token: string) => {
   const response = await axios.get("http://localhost:3337/api/templates/", {
@@ -15,10 +11,10 @@ const getTemplates = async (token: string) => {
   return response.data.templates;
 };
 
-const postTemplate = async (token: string, template: TemplateData) => {
+const postTemplate = async (token: string, templateName: Template["name"]) => {
   const response = await axios.post(
     "http://localhost:3337/api/templates/",
-    template,
+    { name: templateName },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,18 +38,4 @@ const getTemplate = async (templateId: Template["id"], token: string) => {
   return response.data;
 };
 
-const postExercise = async (token: string, exercise: ExerciseData) => {
-  const response = await axios.post(
-    "http://localhost:3337/api/exercises/",
-    exercise,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  return response.data;
-};
-
-export { getTemplates, getTemplate, postTemplate, postExercise };
+export { getTemplates, getTemplate, postTemplate };

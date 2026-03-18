@@ -1,6 +1,6 @@
 import React, { type Dispatch, type SetStateAction } from "react";
 import { useTemplate } from "../../context/TemplatesContext";
-import { type Template } from "../../context/TemplatesContext";
+import { type Template } from "../../types/template";
 
 const TemplatesList = ({
   setEditTemplate,
