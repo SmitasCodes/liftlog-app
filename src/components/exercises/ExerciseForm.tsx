@@ -1,9 +1,13 @@
 import { useState, type ChangeEvent } from "react";
-import { postExercise } from "../../services/exerciseServices.tsx";
+import {
+  postExercise,
+  postTemplateExercise,
+} from "../../services/exerciseServices.tsx";
 import { useAuth } from "../../context/AuthContext";
 import type { ExerciseData } from "./types.ts";
+import type { Template } from "../../context/TemplatesContext.tsx";
 
-const ExerciseForm = () => {
+const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
   const [formData, setFormData] = useState<ExerciseData>({
     name: "",
     sets: 0,
@@ -17,7 +21,13 @@ const ExerciseForm = () => {
     try {
       if (!formData.name) return;
       const exercise = await postExercise(token, formData.name);
-      console.log(exercise);
+      const exerciseId: number = exercise.id;
+      const templateExercise = await postTemplateExercise(
+        templateId,
+        exerciseId,
+        token,
+      );
+      console.log(templateExercise);
     } catch (error) {
       console.error("Failed to create exercise: ", error);
     }
