@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import {
   postExercise,
   postTemplateExercise,
@@ -11,37 +11,34 @@ import type {
 } from "../../types/template.ts";
 
 const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
-  const [exerciseName, setExerciseName] = useState<Exercise["name"] | null>(
-    null,
-  );
+  const [exerciseName, setExerciseName] = useState<Exercise["name"]>("");
 
-  const [templateExercise, setTemplateExercise] = useState<Pick<
-    TemplateExercise,
-    "sets" | "order"
-  > | null>(null);
+  // #######################
+  // Order is hardcoded for now
+  const [templateExercise, setTemplateExercise] = useState<
+    Pick<TemplateExercise, "sets" | "order">
+  >({ sets: 0, order: 5 });
+  // #######################
 
   const { user } = useAuth();
   const token = user?.token || "";
 
   const handleSubmit = async () => {
     try {
-      const exercise = await postExercise(token, exerciseName);
-      const exerciseId: Exercise["id"] = exercise.id;
-      const templateExercise = await postTemplateExercise(
+      // #######################
+      setTemplateExercise((prev) => ({ ...prev, order: 5 }));
+      const addExercise = await postExercise(token, exerciseName);
+      const exerciseId: Exercise["id"] = addExercise.id;
+      const addTemplateExercise = await postTemplateExercise(
         templateId,
         exerciseId,
         token,
+        templateExercise,
       );
-      console.log(templateExercise);
+      console.log(addTemplateExercise);
     } catch (error) {
       console.error("Failed to create exercise: ", error);
     }
-  };
-
-  // Broken function need changing, leaving rn for testing
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setExerciseName(value);
   };
 
   return (
@@ -52,7 +49,7 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
         type="text"
         name="name"
         className="bg-blue-200"
-        onChange={handleChange}
+        onChange={(e) => setExerciseName(e.target.value)}
       />
       <label htmlFor="exerciseSets">Sets</label>
       <input
@@ -61,9 +58,13 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
         max={10}
         className="w-12 bg-blue-200"
         name="sets"
+        onChange={(e) =>
+          setTemplateExercise((prev) => ({
+            ...prev,
+            sets: Number(e.target.value),
+          }))
+        }
       />
-      <button className="text-2xl cursor-pointer">&uarr;</button>
-      <button className="text-2xl cursor-pointer">&darr;</button>
       <button
         className="bg-red-300 px-2 py-0.5 cursor-pointer"
         type="button"
@@ -74,5 +75,8 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
     </form>
   );
 };
+
+// <button className="text-2xl cursor-pointer">&uarr;</button>
+// <button className="text-2xl cursor-pointer">&darr;</button>
 
 export default ExerciseForm;
