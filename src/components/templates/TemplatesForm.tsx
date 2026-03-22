@@ -1,8 +1,8 @@
 import { useEffect, useState, type ChangeEvent, type SubmitEvent } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { getTemplate, postTemplate } from "../../services/templateServices";
 import { type Template } from "../../types/template";
 import Exercises from "../exercises/Exercises";
+import { useTemplate } from "../../context/TemplatesContext";
 
 const TemplatesForm = ({
   templateId,
@@ -11,37 +11,33 @@ const TemplatesForm = ({
 }) => {
   const { user } = useAuth();
   const token = user?.token || "";
-  const [templateName, setTemplateName] = useState<Template["name"]>("");
-  const [template, setTemplate] = useState<Pick<
-    Template,
-    "id" | "name"
-  > | null>(null);
+  const { addTemplate } = useTemplate();
+  const [template, setTemplate] = useState<Pick<Template, "id" | "name">>({
+    id: 0,
+    name: "",
+  });
 
-  useEffect(() => {
-    if (templateId !== null) {
-      const fetchTemplate = async () => {
-        const template = await getTemplate(templateId, token);
-        setTemplateName(template.name);
-      };
-      fetchTemplate();
-    }
-  }, [token, templateId]);
+  // ###########################
+  // Broken will need a fix for it. EDITING FUNCTIONALITY BLOCK
+  // ###########################
+  // useEffect(() => {
+  //   if (templateId !== null) {
+  //     const fetchTemplate = async () => {
+  //       const template = await getTemplate(templateId, token);
+  //       setTemplateName(template.name);
+  //     };
+  //     fetchTemplate();
+  //   }
+  // }, [token, templateId]);
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
-    try {
-      const template = await postTemplate(token, templateName);
-      setTemplate({ name: template.name, id: template.id });
-    } catch (error) {
-      console.error("Failed to create template", error);
+    const templateAdd = await addTemplate(template.name);
+    if (templateAdd === null) {
+      setTemplate({ name: "", id: 0 });
+    } else {
+      setTemplate(templateAdd);
     }
-  };
-
-  // FIX NEEDED
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-
-    setTemplateName(value);
   };
 
   return (
@@ -55,23 +51,24 @@ const TemplatesForm = ({
             type="text"
             name="name"
             className={`bg-blue-200 pl-1.5`}
-            onChange={handleChange}
-            value={templateName}
-            disabled={template !== null}
+            onChange={(e) => {
+              setTemplate((prev) => ({ ...prev, name: e.target.value }));
+            }}
+            value={template.name}
+            disabled={template.id !== 0}
           />
         </div>
 
-        {!template && (
+        {!template.id && (
           <button type="submit" className="bg-blue-500 px-0.5 cursor-pointer">
             Add template
           </button>
         )}
       </form>
 
-      {template && <Exercises templateId={template.id} />}
+      {template.id !== 0 && <Exercises templateId={template.id} />}
     </>
   );
 };
-
 
 export default TemplatesForm;

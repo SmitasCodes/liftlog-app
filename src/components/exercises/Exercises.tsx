@@ -6,8 +6,8 @@ import ExerciseForm from "./ExerciseForm";
 const Exercises = ({ templateId }: { templateId: Template["id"] }) => {
   return (
     <>
-      <ExerciseForm templateId={templateId} />
       <ExerciseList />
+      <ExerciseForm templateId={templateId} />
     </>
   );
 };

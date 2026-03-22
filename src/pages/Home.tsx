@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import Templates from "../components/templates/Templates";
 import { useAuth } from "../context/AuthContext";
-import { getTemplates } from "../services/templateServices";
 import { useTemplate } from "../context/TemplatesContext";
 
 const Home = () => {
@@ -10,12 +9,7 @@ const Home = () => {
   const token = user?.token || "";
 
   useEffect(() => {
-    const fetchTemplates = async () => {
-      const templates = await getTemplates(token);
-      loadTemplates(templates);
-    };
-
-    fetchTemplates();
+    loadTemplates();
   }, [token, loadTemplates]);
 
   return (
