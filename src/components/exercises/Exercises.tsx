@@ -4,9 +4,10 @@ import ExerciseList from "./ExerciseList";
 import ExerciseForm from "./ExerciseForm";
 
 const Exercises = ({ templateId }: { templateId: Template["id"] }) => {
+  console.log(templateId);
   return (
     <>
-      <ExerciseList />
+      <ExerciseList templateId={templateId} />
       <ExerciseForm templateId={templateId} />
     </>
   );

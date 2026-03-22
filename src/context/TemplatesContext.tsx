@@ -1,8 +1,16 @@
 import { createContext, useCallback, useContext, type ReactNode } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { type Template } from "../types/template";
+import {
+  type Exercise,
+  type Template,
+  type TemplateExercise,
+} from "../types/template";
 import { getTemplates, postTemplate } from "../services/templateServices";
 import { useAuth } from "./AuthContext";
+import {
+  postExercise,
+  postTemplateExercise,
+} from "../services/exerciseServices";
 
 interface TemplateContextType {
   templates: Template[];
@@ -10,6 +18,11 @@ interface TemplateContextType {
   addTemplate: (
     templateName: string,
   ) => Promise<Pick<Template, "id" | "name"> | null>;
+  addExercise: (
+    exerciseName: Exercise["name"],
+    templateId: Template["id"],
+    setsOrder: Pick<TemplateExercise, "sets" | "order">,
+  ) => Promise<boolean>;
 }
 
 const TemplateContext = createContext<TemplateContextType | undefined>(
@@ -42,7 +55,7 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [token, setTemplates]);
 
-  const addTemplate = async ( templateName: string) => {
+  const addTemplate = async (templateName: string) => {
     try {
       const template = await postTemplate(token, templateName);
       await loadTemplates();
@@ -53,8 +66,27 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const addExercise = async (
+    exerciseName: Exercise["name"],
+    templateId: Template["id"],
+    setsOrder: Pick<TemplateExercise, "sets" | "order">,
+  ) => {
+    try {
+      const exercise = await postExercise(token, exerciseName);
+      const exerciseId: Exercise["id"] = exercise.id;
+      await postTemplateExercise(templateId, exerciseId, token, setsOrder);
+      await loadTemplates();
+      return true;
+    } catch (error) {
+      console.error("Failed to create exercise: ", error);
+      return false;
+    }
+  };
+
   return (
-    <TemplateContext.Provider value={{ templates, loadTemplates, addTemplate }}>
+    <TemplateContext.Provider
+      value={{ templates, loadTemplates, addTemplate, addExercise }}
+    >
       {children}
     </TemplateContext.Provider>
   );

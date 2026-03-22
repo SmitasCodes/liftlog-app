@@ -9,36 +9,21 @@ import type {
   Exercise,
   TemplateExercise,
 } from "../../types/template.ts";
+import { useTemplate } from "../../context/TemplatesContext.tsx";
 
 const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
   const [exerciseName, setExerciseName] = useState<Exercise["name"]>("");
+  const { addExercise } = useTemplate();
 
   // #######################
   // Order is hardcoded for now
-  const [templateExercise, setTemplateExercise] = useState<
+  const [setsOrder, setSetsOrder] = useState<
     Pick<TemplateExercise, "sets" | "order">
-  >({ sets: 0, order: 5 });
+  >({ sets: 0, order: 6 });
   // #######################
 
-  const { user } = useAuth();
-  const token = user?.token || "";
-
   const handleSubmit = async () => {
-    try {
-      // #######################
-      setTemplateExercise((prev) => ({ ...prev, order: 5 }));
-      const addExercise = await postExercise(token, exerciseName);
-      const exerciseId: Exercise["id"] = addExercise.id;
-      const addTemplateExercise = await postTemplateExercise(
-        templateId,
-        exerciseId,
-        token,
-        templateExercise,
-      );
-      console.log(addTemplateExercise);
-    } catch (error) {
-      console.error("Failed to create exercise: ", error);
-    }
+    await addExercise(exerciseName, templateId, setsOrder);
   };
 
   return (
@@ -59,7 +44,7 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
         className="w-12 bg-blue-200"
         name="sets"
         onChange={(e) =>
-          setTemplateExercise((prev) => ({
+          setSetsOrder((prev) => ({
             ...prev,
             sets: Number(e.target.value),
           }))

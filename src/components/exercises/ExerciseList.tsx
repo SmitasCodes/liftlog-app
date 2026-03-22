@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTemplate } from "../../context/TemplatesContext";
+import type { Template } from "../../types/template";
 
-const ExerciseList = () => {
+const ExerciseList = ({ templateId }: { templateId: Template["id"] }) => {
   const { templates } = useTemplate();
 
-  console.log(templates)
+  useEffect(() => {
+    const templateExercises = templates.find(
+      (template) => template.id === templateId,
+    )?.templateExercises;
+
+  }, [templateId, templates]);
+
   return <div>ExerciseList</div>;
 };
 
