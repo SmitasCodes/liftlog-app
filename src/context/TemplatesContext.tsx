@@ -23,6 +23,9 @@ interface TemplateContextType {
     templateId: Template["id"],
     setsOrder: Pick<TemplateExercise, "sets" | "order">,
   ) => Promise<boolean>;
+  filterTemplateExercises: (
+    templateId: Template["id"],
+  ) => (Pick<TemplateExercise, "id" | "sets" | "order"> & Exercise) | undefined;
 }
 
 const TemplateContext = createContext<TemplateContextType | undefined>(
@@ -83,9 +86,23 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const filterTemplateExercises = (templateId: Template["id"]) => {
+    const templateExercises = templates.find(
+      (template) => template.id === templateId,
+    )?.templateExercises;
+
+    return templateExercises;
+  };
+
   return (
     <TemplateContext.Provider
-      value={{ templates, loadTemplates, addTemplate, addExercise }}
+      value={{
+        templates,
+        loadTemplates,
+        addTemplate,
+        addExercise,
+        filterTemplateExercises,
+      }}
     >
       {children}
     </TemplateContext.Provider>

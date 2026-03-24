@@ -10,9 +10,12 @@ const ExerciseList = ({ templateId }: { templateId: Template["id"] }) => {
       (template) => template.id === templateId,
     )?.templateExercises;
 
+    console.log(templateExercises);
   }, [templateId, templates]);
 
-  return <div>ExerciseList</div>;
+  return <div>
+    
+  </div>;
 };
 
 export default ExerciseList;
