@@ -13,6 +13,7 @@ interface TemplateExercise {
   id: number;
   order: number;
   sets: number;
+  exercise: Exercise;
   exerciseId: number;
   templateId: number;
 }

@@ -1,10 +1,8 @@
-import React from "react";
-import { type Template } from "../../context/TemplatesContext";
+import { type Template } from "../../types/template.ts";
 import ExerciseList from "./ExerciseList";
 import ExerciseForm from "./ExerciseForm";
 
 const Exercises = ({ templateId }: { templateId: Template["id"] }) => {
-  console.log(templateId);
   return (
     <>
       <ExerciseList templateId={templateId} />

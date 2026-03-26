@@ -25,7 +25,9 @@ interface TemplateContextType {
   ) => Promise<boolean>;
   filterTemplateExercises: (
     templateId: Template["id"],
-  ) => (Pick<TemplateExercise, "id" | "sets" | "order"> & Exercise) | undefined;
+  ) => (Pick<TemplateExercise, "id" | "sets" | "order"> & {
+    exercise: Exercise;
+  })[];
 }
 
 const TemplateContext = createContext<TemplateContextType | undefined>(
@@ -91,7 +93,9 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
       (template) => template.id === templateId,
     )?.templateExercises;
 
-    return templateExercises;
+    console.log(templateExercises);
+
+    return templateExercises ?? [];
   };
 
   return (

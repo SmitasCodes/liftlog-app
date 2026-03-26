@@ -19,7 +19,7 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
   // Order is hardcoded for now
   const [setsOrder, setSetsOrder] = useState<
     Pick<TemplateExercise, "sets" | "order">
-  >({ sets: 0, order: 6 });
+  >({ sets: 0, order: 7 });
   // #######################
 
   const handleSubmit = async () => {
