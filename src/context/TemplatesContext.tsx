@@ -23,9 +23,10 @@ interface TemplateContextType {
     templateId: Template["id"],
     setsOrder: Pick<TemplateExercise, "sets" | "order">,
   ) => Promise<boolean>;
-  filterTemplateExercises: (
-    templateId: Template["id"],
-  ) => (Pick<TemplateExercise, "id" | "sets" | "order"> & {
+  filterTemplateExercises: (templateId: Template["id"]) => (Pick<
+    TemplateExercise,
+    "id" | "sets" | "order"
+  > & {
     exercise: Exercise;
   })[];
 }
@@ -77,6 +78,7 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
     setsOrder: Pick<TemplateExercise, "sets" | "order">,
   ) => {
     try {
+      console.log(setsOrder);
       const exercise = await postExercise(token, exerciseName);
       const exerciseId: Exercise["id"] = exercise.id;
       await postTemplateExercise(templateId, exerciseId, token, setsOrder);
@@ -93,7 +95,7 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
       (template) => template.id === templateId,
     )?.templateExercises;
 
-    console.log(templateExercises);
+    
 
     return templateExercises ?? [];
   };

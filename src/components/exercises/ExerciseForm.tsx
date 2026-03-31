@@ -1,9 +1,4 @@
 import { useState } from "react";
-import {
-  postExercise,
-  postTemplateExercise,
-} from "../../services/exerciseServices.tsx";
-import { useAuth } from "../../context/AuthContext";
 import type {
   Template,
   Exercise,
@@ -14,16 +9,16 @@ import { useTemplate } from "../../context/TemplatesContext.tsx";
 const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
   const [exerciseName, setExerciseName] = useState<Exercise["name"]>("");
   const { addExercise } = useTemplate();
-
-  // #######################
-  // Order is hardcoded for now
+  const { filterTemplateExercises } = useTemplate();
   const [setsOrder, setSetsOrder] = useState<
     Pick<TemplateExercise, "sets" | "order">
-  >({ sets: 0, order: 7 });
-  // #######################
+  >({ sets: 0, order: 0 });
 
   const handleSubmit = async () => {
-    await addExercise(exerciseName, templateId, setsOrder);
+    const exerciseOrder = filterTemplateExercises(templateId).length + 1;
+    const setsOrderData = { ...setsOrder, order: exerciseOrder };
+    setSetsOrder(setsOrderData);
+    await addExercise(exerciseName, templateId, setsOrderData);
   };
 
   return (
@@ -49,6 +44,7 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
             sets: Number(e.target.value),
           }))
         }
+        value={setsOrder.sets}
       />
       <button
         className="bg-red-300 px-2 py-0.5 cursor-pointer"
@@ -60,8 +56,5 @@ const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
     </form>
   );
 };
-
-// <button className="text-2xl cursor-pointer">&uarr;</button>
-// <button className="text-2xl cursor-pointer">&darr;</button>
 
 export default ExerciseForm;
