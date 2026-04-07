@@ -15,9 +15,9 @@ const Home = () => {
   return (
     <>
       <Templates templates={templates} />
-      <button onClick={logOut} className="cursor-pointer">
+      {/* <button onClick={logOut} className="cursor-pointer">
         Log out
-      </button>
+      </button> */}
     </>
   );
 };

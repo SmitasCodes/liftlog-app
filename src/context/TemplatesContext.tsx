@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
 import { useLocalStorage } from "usehooks-ts";
 import {
   type Exercise,
@@ -14,6 +20,9 @@ import {
 
 interface TemplateContextType {
   templates: Template[];
+  templateExercises: (Pick<TemplateExercise, "sets" | "order" | "id"> & {
+    exercise: Exercise;
+  })[];
   loadTemplates: () => void;
   addTemplate: (
     templateName: string,
@@ -51,6 +60,9 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
     "templates",
     [],
   );
+  const [templateExercises, setTemplateExercises] = useState<
+    (Pick<TemplateExercise, "sets" | "order" | "id"> & { exercise: Exercise })[]
+  >([]);
 
   const loadTemplates = useCallback(async () => {
     try {
@@ -91,19 +103,22 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const filterTemplateExercises = (templateId: Template["id"]) => {
-    const templateExercises = templates.find(
+    const exercises = templates.find(
       (template) => template.id === templateId,
     )?.templateExercises;
 
-    
+    if (exercises !== undefined) {
+      setTemplateExercises(exercises);
+    }
 
-    return templateExercises ?? [];
+    return templateExercises;
   };
 
   return (
     <TemplateContext.Provider
       value={{
         templates,
+        templateExercises,
         loadTemplates,
         addTemplate,
         addExercise,

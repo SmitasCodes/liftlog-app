@@ -42,15 +42,15 @@ const TemplatesForm = ({
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex justify-between">
-        <div>
+      <form onSubmit={handleSubmit} className="flex justify-between flex-wrap">
+        <div className="bg-blue-500 py-1 rounded-lg mb-2 w-full flex justify-between px-1">
           <label htmlFor="name" className="mr-2">
             Name
           </label>
           <input
             type="text"
             name="name"
-            className={`bg-blue-200 pl-1.5`}
+            className={`bg-blue-200 pl-1.5 rounded-md`}
             onChange={(e) => {
               setTemplate((prev) => ({ ...prev, name: e.target.value }));
             }}
@@ -60,10 +60,10 @@ const TemplatesForm = ({
         </div>
 
         {!template.id && (
-          <button type="submit" className="bg-blue-500 px-0.5 cursor-pointer">
+          <button type="submit" className="bg-blue-600 cursor-pointer ml-auto rounded-md py-0.5 px-1">
             Add template
           </button>
-        )}
+          )}
       </form>
 
       {template.id !== 0 && <Exercises templateId={template.id} />}
