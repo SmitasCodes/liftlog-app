@@ -1,24 +1,19 @@
 import { useState } from "react";
-import type {
-  Template,
-  Exercise,
-  TemplateExercise,
-} from "../../types/template.ts";
+import type { Exercise, TemplateExercise } from "../../types/template.ts";
 import { useTemplate } from "../../context/TemplatesContext.tsx";
 
-const ExerciseForm = ({ templateId }: { templateId: Template["id"] }) => {
+const ExerciseForm = () => {
   const [exerciseName, setExerciseName] = useState<Exercise["name"]>("");
-  const { addExercise } = useTemplate();
-  const { filterTemplateExercises } = useTemplate();
+  const { addExercise, currentExercises, activeTemplateId } = useTemplate();
   const [setsOrder, setSetsOrder] = useState<
     Pick<TemplateExercise, "sets" | "order">
   >({ sets: 0, order: 0 });
 
   const handleSubmit = async () => {
-    const exerciseOrder = filterTemplateExercises(templateId).length + 1;
+    const exerciseOrder = currentExercises.length + 1;
     const setsOrderData = { ...setsOrder, order: exerciseOrder };
     setSetsOrder(setsOrderData);
-    await addExercise(exerciseName, templateId, setsOrderData);
+    await addExercise(exerciseName, activeTemplateId, setsOrderData);
   };
 
   return (

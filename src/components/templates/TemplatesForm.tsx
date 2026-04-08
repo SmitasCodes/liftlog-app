@@ -11,7 +11,7 @@ const TemplatesForm = ({
 }) => {
   const { user } = useAuth();
   const token = user?.token || "";
-  const { addTemplate } = useTemplate();
+  const { addTemplate, setActiveTemplateId, activeTemplateId } = useTemplate();
   const [template, setTemplate] = useState<Pick<Template, "id" | "name">>({
     id: 0,
     name: "",
@@ -37,6 +37,7 @@ const TemplatesForm = ({
       setTemplate({ name: "", id: 0 });
     } else {
       setTemplate(templateAdd);
+      setActiveTemplateId(templateAdd.id);
     }
   };
 
@@ -55,18 +56,20 @@ const TemplatesForm = ({
               setTemplate((prev) => ({ ...prev, name: e.target.value }));
             }}
             value={template.name}
-            disabled={template.id !== 0}
+            disabled={activeTemplateId !== 0}
           />
         </div>
 
-        {!template.id && (
-          <button type="submit" className="bg-blue-600 cursor-pointer ml-auto rounded-md py-0.5 px-1">
+        {!activeTemplateId && (
+          <button
+            type="submit"
+            className="bg-blue-600 cursor-pointer ml-auto rounded-md py-0.5 px-1"
+          >
             Add template
           </button>
-          )}
+        )}
       </form>
-
-      {template.id !== 0 && <Exercises templateId={template.id} />}
+      {activeTemplateId !== 0 && <Exercises/>}
     </>
   );
 };

@@ -2,8 +2,11 @@ import {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useState,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import {
@@ -20,9 +23,6 @@ import {
 
 interface TemplateContextType {
   templates: Template[];
-  templateExercises: (Pick<TemplateExercise, "sets" | "order" | "id"> & {
-    exercise: Exercise;
-  })[];
   loadTemplates: () => void;
   addTemplate: (
     templateName: string,
@@ -32,12 +32,11 @@ interface TemplateContextType {
     templateId: Template["id"],
     setsOrder: Pick<TemplateExercise, "sets" | "order">,
   ) => Promise<boolean>;
-  filterTemplateExercises: (templateId: Template["id"]) => (Pick<
-    TemplateExercise,
-    "id" | "sets" | "order"
-  > & {
+  currentExercises: (Pick<TemplateExercise, "id" | "sets" | "order"> & {
     exercise: Exercise;
   })[];
+  setActiveTemplateId: Dispatch<SetStateAction<Template["id"]>>;
+  activeTemplateId: Template["id"];
 }
 
 const TemplateContext = createContext<TemplateContextType | undefined>(
@@ -60,9 +59,8 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
     "templates",
     [],
   );
-  const [templateExercises, setTemplateExercises] = useState<
-    (Pick<TemplateExercise, "sets" | "order" | "id"> & { exercise: Exercise })[]
-  >([]);
+
+  const [activeTemplateId, setActiveTemplateId] = useState<Template["id"]>(0);
 
   const loadTemplates = useCallback(async () => {
     try {
@@ -102,27 +100,24 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const filterTemplateExercises = (templateId: Template["id"]) => {
-    const exercises = templates.find(
-      (template) => template.id === templateId,
-    )?.templateExercises;
+  const currentExercises = useMemo(() => {
+    const foundExercises = templates.find(
+      (template) => template.id === activeTemplateId,
+    );
 
-    if (exercises !== undefined) {
-      setTemplateExercises(exercises);
-    }
-
-    return templateExercises;
-  };
+    return foundExercises?.templateExercises ?? [];
+  }, [templates, activeTemplateId]);
 
   return (
     <TemplateContext.Provider
       value={{
         templates,
-        templateExercises,
         loadTemplates,
+        setActiveTemplateId,
+        activeTemplateId,
+        currentExercises,
         addTemplate,
         addExercise,
-        filterTemplateExercises,
       }}
     >
       {children}

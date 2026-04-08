@@ -1,14 +1,7 @@
-import { useEffect, useState } from "react";
 import { useTemplate } from "../../context/TemplatesContext";
-import type { Template } from "../../types/template";
 
-const ExerciseList = ({ templateId }: { templateId: Template["id"] }) => {
-  const { filterTemplateExercises, templateExercises } = useTemplate();
-
-  useEffect(() => {
-    filterTemplateExercises(templateId);
-    console.log('sdas')
-  }, [templateId]);
+const ExerciseList = () => {
+  const { currentExercises } = useTemplate();
 
   const moveOrderUp = (order: number) => {
     console.log(order);
@@ -20,7 +13,7 @@ const ExerciseList = ({ templateId }: { templateId: Template["id"] }) => {
 
   return (
     <ul>
-      {templateExercises.map((exercise) => {
+      {currentExercises.map((exercise) => {
         return (
           <li className="flex justify-between items-center bg-blue-500 rounded-xl px-1.5 mb-2 py-0.5">
             <div className="flex items-center">
