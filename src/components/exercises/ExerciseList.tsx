@@ -1,16 +1,19 @@
 import { useTemplate } from "../../context/TemplatesContext";
 
 const ExerciseList = () => {
-  const { currentExercises } = useTemplate();
+  const { currentExercises, templates, setTemplates } = useTemplate();
 
-  const moveOrderUp = (order: number) => {
-    console.log(order);
+  const moveOrderUp = (order: number, id: number) => {
+    const testas = currentExercises.find((exercise) => exercise.id === id);
+    if (testas) testas.order++;
+    console.log(templates)
+    setTemplates((prev) =>({...prev, templateExercise}))
   };
 
   const moveOrderDown = (order: number) => {
     console.log(order);
   };
-
+  console.log(currentExercises);
   return (
     <ul>
       {currentExercises.map((exercise) => {
@@ -25,7 +28,7 @@ const ExerciseList = () => {
             <div>
               <button
                 className="text-xl cursor-pointer mr-2 bg-blue-700 px-1 rounded-lg"
-                onClick={() => moveOrderUp(exercise.order)}
+                onClick={() => moveOrderUp(exercise.order, exercise.id)}
               >
                 &uarr;
               </button>

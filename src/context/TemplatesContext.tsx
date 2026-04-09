@@ -37,6 +37,7 @@ interface TemplateContextType {
   })[];
   setActiveTemplateId: Dispatch<SetStateAction<Template["id"]>>;
   activeTemplateId: Template["id"];
+  setTemplates: Dispatch<SetStateAction<Template[]>>;
 }
 
 const TemplateContext = createContext<TemplateContextType | undefined>(
@@ -103,9 +104,9 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
   const currentExercises = useMemo(() => {
     const foundExercises = templates.find(
       (template) => template.id === activeTemplateId,
-    );
+    )?.templateExercises;
 
-    return foundExercises?.templateExercises ?? [];
+    return foundExercises?.toSorted((a, b) => a.order - b.order) ?? [];
   }, [templates, activeTemplateId]);
 
   return (
@@ -118,6 +119,7 @@ const TemplateProvider = ({ children }: { children: ReactNode }) => {
         currentExercises,
         addTemplate,
         addExercise,
+        setTemplates,
       }}
     >
       {children}

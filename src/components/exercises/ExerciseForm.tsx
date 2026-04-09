@@ -13,7 +13,12 @@ const ExerciseForm = () => {
     const exerciseOrder = currentExercises.length + 1;
     const setsOrderData = { ...setsOrder, order: exerciseOrder };
     setSetsOrder(setsOrderData);
-    await addExercise(exerciseName, activeTemplateId, setsOrderData);
+    const exercise = await addExercise(
+      exerciseName,
+      activeTemplateId,
+      setsOrderData,
+    );
+    if (exercise) setExerciseName("");
   };
 
   return (
@@ -28,6 +33,7 @@ const ExerciseForm = () => {
         name="name"
         className="bg-blue-200 rounded-md"
         onChange={(e) => setExerciseName(e.target.value)}
+        value={exerciseName}
       />
       <label htmlFor="exerciseSets">Sets</label>
       <input
